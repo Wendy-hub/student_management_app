@@ -1,0 +1,45 @@
+{% extends 'student_management_app/home.html' %}
+{% load crispy_forms_filters %}
+{#教师下所有界面统一这部分#}
+{% block login_display %}
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+{#    <div class="content-section">#}
+{#      <form method="POST" enctype="multipart/form-data">#}
+{#          {% csrf_token %}#}
+{#          <fieldset class="form-group">#}
+{#              <legend class="border-bottom mb-4">Profile Info</legend>#}
+{#              {{ form|crispy }}#}
+{#          </fieldset>#}
+{#          <div class="form-group">#}
+{#              <button class="btn btn-outline-info" type="submit">Update</button>#}
+{#          </div>#}
+{#      </form>#}
+{#    </div>#}
+
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <div class="card bg-light mb-3">
+          <div class="card-header">
+            <i class="fa-solid fa-pen-to-square fa-lg"></i> Update Student Records
+          </div>
+          <div class="card-body">
+            <form action="" method="POST">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <button type="submit" class="btn btn-primary">完成</button>
+              <a href="{% url 'students_in_course' course_id %}" class="btn btn-secondary">取消</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}

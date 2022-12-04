@@ -1,0 +1,113 @@
+{% extends 'student_management_app/home.html' %}
+
+{% block login_display %}
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">学生界面</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_profile' %}>个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_result' %}>查看课程及成绩</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+{#    <table class="table table-sm">#}
+{#      <thead>#}
+{#        <tr>#}
+{#            <th scope="col">#</th>#}
+{#            <th scope="col">课程</th>#}
+{#            <th scope="col">课程号</th>#}
+{#            <th scope="col">分数</th>#}
+{#            <th scope="col">课程地点</th>#}
+{#            <th scope="col">课程结束时间</th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        {% for course, score in result %}#}
+{#        <tr>#}
+{#            <th scope="row">{{ forloop.counter }}</th>#}
+{#            <td>{{ course.C_name }}</td>#}
+{#            <td>{{ course.C_id }}</td>#}
+{#            <td>{{ score.score }}</td>#}
+{#            <td>{{ course.C_site }}</td>#}
+{#            <td>{{ course.C_time }}</td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{#      </tbody>>#}
+{#    </table>#}
+    <h3 class="m-4">所有课程</h3>
+    <div class="row">
+      <div class="col-12">
+        {% if result %}
+        <div class="card bg-light ms-4 me-4 mb-4">
+          <div class="card-header">
+            <i class="fa-solid fa-list fa-lg"></i> 课程记录
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">课程</th>
+                      <th scope="col">课程号</th>
+                      <th scope="col">分数</th>
+                      <th scope="col">上课地点</th>
+                      <th scope="col">课程结束时间</th>
+                      <th scope="col">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for course, score in result %}
+                      <tr>
+                        <td>{{ course.C_name }}</td>
+                        <td>{{ course.C_number }}</td>
+                        <td>{{ score.score }}</td>
+                        <td>{{ course.C_site }}</td>
+                        <td>{{ course.C_time }}</td>
+                        <td>
+                          <a type="button" class="btn btn-success me-1" data-bs-toggle="modal" data-bs-target="#myModal{{course.C_id}}">
+                            <i class="fa-solid fa-rocket"></i>
+                          </a>
+
+                          <!-- Modal - View Student -->
+                          <div class="modal" id="myModal{{course.C_id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">
+                                    课程: {{ course.C_name }} {{ course.C_number }}
+                                  </h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"></span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <ul class="list-unstyled">
+                                    <li>地点: <strong>{{ course.C_site }}</strong></li>
+                                    <li>结束时间: <strong>{{ course.C_time }}</strong></li>
+                                    <li>分数: <strong>{{ score.score }}</strong></li>
+                                  </ul>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </p>
+          </div>
+        </div>
+        {% else %}
+          <h5 class="alert alert-primary ms-4 me-4">没有课程记录</h5>
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}

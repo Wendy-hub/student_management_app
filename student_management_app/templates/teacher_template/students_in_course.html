@@ -1,0 +1,93 @@
+{% extends 'student_management_app/home.html' %}
+{#教师下所有界面统一这部分#}
+{% block login_display %}
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<h3 class="m-4">课程号{{ course_id }}的所有学生</h3>
+<div class="row">
+  <div class="col-12">
+    {% if results %}
+    <div class="card bg-light ms-4 me-4 mb-4">
+      <div class="card-header">
+        <i class="fa-solid fa-list fa-lg"></i> 学生记录
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">学号</th>
+                  <th scope="col">姓名</th>
+                  <th scope="col">性别</th>
+                  <th scope="col">专业</th>
+                  <th scope="col">成绩</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for student, score in results %}
+                  <tr>
+                    <td>{{ student.S_number }}</td>
+                    <td>{{ student.S_name }}</td>
+                    <td>{{ student.S_sex }}</td>
+                    <td>{{ student.S_major }}</td>
+                    <td>{{ score.score }}</td>
+                    <td>
+                      <button type="button" class="btn btn-success me-1" data-bs-toggle="modal" data-bs-target="#myModal{{student.S_id}}">
+                        <i class="fa-solid fa-circle-info fa-lg"></i>
+                      </button>
+
+                      <!-- Modal - View Student -->
+                      <div class="modal" id="myModal{{student.S_id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                学生: {{ student.S_major }} {{ student.S_number }}
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <ul class="list-unstyled">
+                                <li>姓名: <strong>{{ student.S_name }}</strong></li>
+                                <li>性别: <strong>{{ student.S_sex }}</strong></li>
+                                <li>邮箱: <strong>{{ student.S_email }}</strong></li>
+                                <li>成绩: <strong>{{ score.score }}</strong></li>
+                              </ul>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <a class="btn btn-warning me-1" href="{% url 'edit_student' course_id student.S_number %}">
+                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </p>
+      </div>
+    </div>
+    {% else %}
+      <h5 class="alert alert-primary ms-4 me-4">No Student Records</h5>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

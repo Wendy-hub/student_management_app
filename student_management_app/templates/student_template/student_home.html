@@ -1,0 +1,15 @@
+{% extends 'student_management_app/home.html' %}
+
+{% block login_display %}
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">学生界面</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_profile' %}>个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_result' %}>查看课程及成绩</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h2>Welcome to Student Home!</h2>
+{% endblock content %}

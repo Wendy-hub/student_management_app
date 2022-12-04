@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<header id="showcase">
+    <style>
+        *{
+          margin:0;
+          padding:0;
+        }
+
+        body{
+          margin:0;
+          font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+          font-size:17px;
+          color:#926239;
+          line-height:1.6;
+        }
+
+        #showcase{
+          background-image:url('http://traversymedia.com/downloads/assets/beachshowcase.jpg');
+          background-size:cover;
+          background-position:center;
+          height:100vh;
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+          align-items:center;
+          text-align:center;
+          padding:0 20px;
+        }
+
+        #showcase h1{
+          font-size:50px;
+          line-height:1.2;
+        }
+
+        #showcase p{
+          font-size:20px;
+        }
+
+        #showcase .button{
+          font-size:18px;
+          text-decoration:none;
+          color:#926239;
+          border:#926239 1px solid;
+          padding:10px 20px;
+          border-radius:10px;
+          margin-top:20px;
+        }
+
+        #showcase .button:hover{
+          background:#926239;
+          color:#fff;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <h1>欢迎来到学籍管理系统</h1>
+    <p>2022年秋学期</p>
+    <a href="{% url 'student_login' %}" class="button">学生登陆</a>
+    <a href="{% url 'teacher_login' %}" class="button">教师登录</a>
+
+</header>
+</html>

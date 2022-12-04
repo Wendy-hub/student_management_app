@@ -1,0 +1,35 @@
+{% extends 'student_management_app/home.html' %}
+{% load crispy_forms_filters %}
+
+{#教师下所有界面统一这部分#}
+{% block login_display %}
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+          <!-- 记得传入变量 -->
+        <img class="rounded-circle account-img" src="{{ teacher_img.url }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.username }}</h2>
+        </div>
+      </div>
+      <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">个人信息</legend>
+              {{ form|crispy }}
+          </fieldset>
+          <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">更新</button>
+          </div>
+      </form>
+    </div>
+{% endblock content %}

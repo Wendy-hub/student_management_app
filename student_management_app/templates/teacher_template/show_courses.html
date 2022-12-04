@@ -1,0 +1,62 @@
+{% extends 'student_management_app/home.html' %}
+{#教师下所有界面统一这部分#}
+{% block login_display %}
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<h3 class="m-4">所有课程</h3>
+<div class="row">
+  <div class="col-12">
+    {% if courses %}
+    <div class="card bg-light ms-4 me-4 mb-4">
+      <div class="card-header">
+        <i class="fa-solid fa-list fa-lg"></i> 课程记录
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">课程号</th>
+                  <th scope="col">课程名</th>
+                  <th scope="col">任课教师号</th>
+                  <th scope="col">上课地点</th>
+                  <th scope="col">课程结束时间</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for course in courses %}
+                  <tr>
+                    <td>{{ course.C_number }}</td>
+                    <td>{{ course.C_name }}</td>
+                    <td>{{ course.T_id }}</td>
+                    <td>{{ course.C_site }}</td>
+                    <td>{{ course.C_time }}</td>
+                    <td>
+                      <a class="btn btn-success me-1" href="{% url 'students_in_course' course.C_number %}">
+                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </p>
+      </div>
+    </div>
+    {% else %}
+      <h5 class="alert alert-primary ms-4 me-4">没有课程记录</h5>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
