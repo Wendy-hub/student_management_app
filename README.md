@@ -27,5 +27,15 @@ $ pip install django-filter
 127.0.0.1:8000
 ```
 
+![ER-diagram](images/ER.png)
+![show](images/show.png)
+![index](images/index.png)
+![login](images/login.png)
+![home](images/home.png)
+![profile](images/profile.png)
+![update](images/edit.png)
+![not_login](images/not-login.png)
+![password](images/reset-password.png)
+
 ### Contact 联系我：
 邮箱： 1098109462@qq.com
