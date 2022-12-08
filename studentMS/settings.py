@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'student_management_app',
     'crispy_forms',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

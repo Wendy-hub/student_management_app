@@ -1,20 +1,58 @@
 {% extends 'student_management_app/home.html' %}
+
+{% block js %}
+    <script>
+
+    function search_by_number() {
+        document.getElementById("results_by_number").style.display = "block";
+        document.getElementById("results_by_time").style.display = "none";
+        document.getElementById("results_by_studentnums").style.display = "none";
+    }
+    function search_by_time() {
+        document.getElementById("results_by_number").style.display = "none";
+        document.getElementById("results_by_time").style.display = "block";
+        document.getElementById("results_by_studentnums").style.display = "none";
+    }
+    function search_by_studentnums() {
+        document.getElementById("results_by_number").style.display = "none";
+        document.getElementById("results_by_time").style.display = "none";
+        document.getElementById("results_by_studentnums").style.display = "block";
+    }
+
+
+    $(document).ready( function () {
+        $('#myTable').DataTable();
+    } );
+    </script>
+{% endblock %}
+
 {#教师下所有界面统一这部分#}
 {% block login_display %}
     <div class="border-end bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="sidebar-heading border-bottom">教师界面</div>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_home' %}"><i class="fa-solid fa-house"></i> 首页</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}"><i class="fa-solid fa-user"></i> 个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}"><i class="fa-solid fa-school"></i>  课程相关信息</a>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
+
+
+
 <h3 class="m-4">所有课程</h3>
-<div class="row">
+
+    <form class="d-flex">
+        <input class="form-control me-sm-2" type="text" placeholder="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+<!-- 默认按班级人数排序 -->
+<div class="row" id="results_by_studentnums" style="display: block">
   <div class="col-12">
-    {% if courses %}
+    {% if courses_by_studentnums %}
     <div class="card bg-light ms-4 me-4 mb-4">
       <div class="card-header">
         <i class="fa-solid fa-list fa-lg"></i> 课程记录
@@ -22,28 +60,61 @@
       <div class="card-body">
         <p class="card-text">
           <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover display" id="myTable">
               <thead>
                 <tr>
-                  <th scope="col">课程号</th>
-                  <th scope="col">课程名</th>
-                  <th scope="col">任课教师号</th>
-                  <th scope="col">上课地点</th>
-                  <th scope="col">课程结束时间</th>
-                  <th scope="col">操作</th>
+                  <th scope="col"><button class="btn btn-primary btn-lg btn-block" onclick="search_by_number()">课程号</button></th>
+                  <th scope="col"><button class="btn btn-secondary btn-lg btn-block">课程名</button></th>
+                  <th scope="col"><button class="btn btn-danger btn-lg btn-block">任课教师</button></th>
+                  <th scope="col"><button class="btn btn-info btn-lg btn-block">上课地点</button></th>
+                  <th scope="col"><button class="btn btn-success btn-lg btn-block" onclick="search_by_time()">课程结束时间</button></th>
+                  <th scope="col"><button class="btn btn-dark btn-lg btn-block" onclick="search_by_studentnums()">课程人数</button></th>
+                  <th scope="col"><button class="btn btn-warning btn-lg btn-block">操作</button></th>
                 </tr>
               </thead>
               <tbody>
-                {% for course in courses %}
+                {% for course, number in courses_by_studentnums %}
                   <tr>
                     <td>{{ course.C_number }}</td>
                     <td>{{ course.C_name }}</td>
                     <td>{{ course.T_id }}</td>
                     <td>{{ course.C_site }}</td>
                     <td>{{ course.C_time }}</td>
+                    <td>{{ number.stunums }}</td>
                     <td>
+                      <button type="button" class="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#myModal{{course.C_id}}">
+                          <i class="fa-solid fa-bolt"></i>
+                      </button>
+
+                      <!-- Modal - View Student -->
+                      <div class="modal" id="myModal{{course.C_id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                课程: {{ course.C_name }} {{ course.C_number }}
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <ul class="list-unstyled">
+                                <li>任课教师: <strong>{{ course.T_id }}</strong></li>
+                                <li>课程地点: <strong>{{ course.C_site }}</strong></li>
+                                <li>结束时间: <strong>{{ course.C_time }}</strong></li>
+                                <li>课程人数: <strong>{{ number.stunums }}</strong></li>
+                              </ul>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       <a class="btn btn-success me-1" href="{% url 'students_in_course' course.C_number %}">
-                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                          <i class="fa-solid fa-pen-to-square fa-lg"></i>
                       </a>
                     </td>
                   </tr>
@@ -59,4 +130,169 @@
     {% endif %}
   </div>
 </div>
+
+<!-- 按课程结束时间排序 -->
+<div class="row" id="results_by_time" style="display: none">
+  <div class="col-12">
+    {% if courses_by_C_time %}
+    <div class="card bg-light ms-4 me-4 mb-4">
+      <div class="card-header">
+        <i class="fa-solid fa-list fa-lg"></i> 课程记录
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <div class="table-responsive">
+            <table class="table table-hover display" id="myTable">
+              <thead>
+                <tr>
+                  <th scope="col"><button class="btn btn-primary btn-lg btn-block" onclick="search_by_number()">课程号</button></th>
+                  <th scope="col"><button class="btn btn-secondary btn-lg btn-block">课程名</button></th>
+                  <th scope="col"><button class="btn btn-danger btn-lg btn-block">任课教师</button></th>
+                  <th scope="col"><button class="btn btn-info btn-lg btn-block">上课地点</button></th>
+                  <th scope="col"><button class="btn btn-success btn-lg btn-block" onclick="search_by_time()">课程结束时间</button></th>
+                  <th scope="col"><button class="btn btn-dark btn-lg btn-block" onclick="search_by_studentnums()">课程人数</button></th>
+                  <th scope="col"><button class="btn btn-warning btn-lg btn-block">操作</button></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for course, number in courses_by_C_time %}
+                  <tr>
+                    <td>{{ course.C_number }}</td>
+                    <td>{{ course.C_name }}</td>
+                    <td>{{ course.T_id }}</td>
+                    <td>{{ course.C_site }}</td>
+                    <td>{{ course.C_time }}</td>
+                    <td>{{ number.stunums }}</td>
+                    <td>
+                      <button type="button" class="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#myModal{{course.C_id}}">
+                          <i class="fa-solid fa-bolt"></i>
+                      </button>
+
+                      <!-- Modal - View Student -->
+                      <div class="modal" id="myModal{{course.C_id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                课程: {{ course.C_name }} {{ course.C_number }}
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <ul class="list-unstyled">
+                                <li>任课教师: <strong>{{ course.T_id }}</strong></li>
+                                <li>课程地点: <strong>{{ course.C_site }}</strong></li>
+                                <li>结束时间: <strong>{{ course.C_time }}</strong></li>
+                                <li>课程人数: <strong>{{ number.stunums }}</strong></li>
+                              </ul>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <a class="btn btn-success me-1" href="{% url 'students_in_course' course.C_number %}">
+                          <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </p>
+      </div>
+    </div>
+    {% else %}
+      <h5 class="alert alert-primary ms-4 me-4">没有课程记录</h5>
+    {% endif %}
+  </div>
+</div>
+
+<!-- 按课序号排序 -->
+<div class="row" id="results_by_number" style="display: none">
+  <div class="col-12">
+    {% if courses_by_number %}
+    <div class="card bg-light ms-4 me-4 mb-4">
+      <div class="card-header">
+        <i class="fa-solid fa-list fa-lg"></i> 课程记录
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <div class="table-responsive">
+            <table class="table table-hover display" id="myTable">
+              <thead>
+                <tr>
+                  <th scope="col"><button class="btn btn-primary btn-lg btn-block" onclick="search_by_number()">课程号</button></th>
+                  <th scope="col"><button class="btn btn-secondary btn-lg btn-block">课程名</button></th>
+                  <th scope="col"><button class="btn btn-danger btn-lg btn-block">任课教师</button></th>
+                  <th scope="col"><button class="btn btn-info btn-lg btn-block">上课地点</button></th>
+                  <th scope="col"><button class="btn btn-success btn-lg btn-block" onclick="search_by_time()">课程结束时间</button></th>
+                  <th scope="col"><button class="btn btn-dark btn-lg btn-block" onclick="search_by_studentnums()">课程人数</button></th>
+                  <th scope="col"><button class="btn btn-warning btn-lg btn-block">操作</button></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for course, number in courses_by_number %}
+                  <tr>
+                    <td>{{ course.C_number }}</td>
+                    <td>{{ course.C_name }}</td>
+                    <td>{{ course.T_id }}</td>
+                    <td>{{ course.C_site }}</td>
+                    <td>{{ course.C_time }}</td>
+                    <td>{{ number.stunums }}</td>
+                    <td>
+                      <button type="button" class="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#myModal{{course.C_id}}">
+                          <i class="fa-solid fa-bolt"></i>
+                      </button>
+
+                      <!-- Modal - View Student -->
+                      <div class="modal" id="myModal{{course.C_id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">
+                                课程: {{ course.C_name }} {{ course.C_number }}
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <ul class="list-unstyled">
+                                <li>任课教师: <strong>{{ course.T_id }}</strong></li>
+                                <li>课程地点: <strong>{{ course.C_site }}</strong></li>
+                                <li>结束时间: <strong>{{ course.C_time }}</strong></li>
+                                <li>课程人数: <strong>{{ number.stunums }}</strong></li>
+                              </ul>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <a class="btn btn-success me-1" href="{% url 'students_in_course' course.C_number %}">
+                          <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </p>
+      </div>
+    </div>
+    {% else %}
+      <h5 class="alert alert-primary ms-4 me-4">没有课程记录</h5>
+    {% endif %}
+  </div>
+</div>
+
 {% endblock %}

@@ -1,6 +1,8 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <header id="showcase">
+    <title>学籍管理系统</title>
     <style>
         *{
           margin:0;
@@ -11,12 +13,13 @@
           margin:0;
           font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
           font-size:17px;
-          color:#926239;
+          color: #e07020;
           line-height:1.6;
         }
 
         #showcase{
           background-image:url('http://traversymedia.com/downloads/assets/beachshowcase.jpg');
+          {#background-image: url("{% static 'images/bg.jpg' %}");#}
           background-size:cover;
           background-position:center;
           height:100vh;
@@ -40,15 +43,15 @@
         #showcase .button{
           font-size:18px;
           text-decoration:none;
-          color:#926239;
-          border:#926239 1px solid;
+          color: #e07020;
+          border: #e07020 1px solid;
           padding:10px 20px;
           border-radius:10px;
           margin-top:20px;
         }
 
         #showcase .button:hover{
-          background:#926239;
+          background: #e07020;
           color:#fff;
         }
     </style>

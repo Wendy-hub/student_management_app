@@ -4,38 +4,14 @@
     <div class="border-end bg-white" id="sidebar-wrapper">
         <div class="sidebar-heading border-bottom bg-light">学生界面</div>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_profile' %}>个人信息</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_result' %}>查看课程及成绩</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'student_home' %}"><i class="fa-solid fa-house"></i> 首页</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_profile' %}><i class="fa-brands fa-twitter"></i>个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_result' %}><i class="fa-solid fa-hippo"></i>    查看课程及成绩</a>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
-
-{#    <table class="table table-sm">#}
-{#      <thead>#}
-{#        <tr>#}
-{#            <th scope="col">#</th>#}
-{#            <th scope="col">课程</th>#}
-{#            <th scope="col">课程号</th>#}
-{#            <th scope="col">分数</th>#}
-{#            <th scope="col">课程地点</th>#}
-{#            <th scope="col">课程结束时间</th>#}
-{#        </tr>#}
-{#      </thead>#}
-{#      <tbody>#}
-{#        {% for course, score in result %}#}
-{#        <tr>#}
-{#            <th scope="row">{{ forloop.counter }}</th>#}
-{#            <td>{{ course.C_name }}</td>#}
-{#            <td>{{ course.C_id }}</td>#}
-{#            <td>{{ score.score }}</td>#}
-{#            <td>{{ course.C_site }}</td>#}
-{#            <td>{{ course.C_time }}</td>#}
-{#        </tr>#}
-{#        {% endfor %}#}
-{#      </tbody>>#}
-{#    </table>#}
     <h3 class="m-4">所有课程</h3>
     <div class="row">
       <div class="col-12">

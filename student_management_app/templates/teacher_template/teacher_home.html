@@ -1,15 +1,72 @@
 {% extends 'student_management_app/home.html' %}
+
+{% block style %}
+    <style>
+        .container, .row {
+            position:relative;
+            padding: 20px 0px;
+            line-height: 1.42857143;
+            vertical-align: middle;
+        }
+        #mydiv {
+            position:absolute;
+            top: 123px;
+        }
+    </style>
+{% endblock %}
+
 {#教师下所有界面统一这部分#}
 {% block login_display %}
     <div class="border-end bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="sidebar-heading border-bottom">教师界面</div>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_home' %}"><i class="fa-solid fa-house"></i> 首页</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}"><i class="fa-solid fa-user"></i> 个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}"><i class="fa-solid fa-school"></i>  课程相关信息</a>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
-    <h2>Welcome to Teacher Home!</h2>
+<div class="container">
+    <div class="row">
+
+    </div>
+    <div class="row">
+
+        <div class="col-md-auto">
+            <h1>Welcome to Teacher Home, {{ user.username }}!</h1>
+        </div>
+
+        <div>
+            <h3>
+                欢迎使用学生管理系统：
+            </h3>
+            <h3 style="color: #2056e0; margin-top: 30px">
+                教师可以在左侧功能栏查看个人信息，查看课程或成绩。
+            </h3>
+            <h3 style="color: #e07020; margin-top: 20px">
+                首次登录，请先点击右上角通过邮箱切换密码！
+            </h3>
+            <h3 style="color: #2056e0; margin-top: 50px">
+                祝使用愉快！
+            </h3>
+        </div>
+
+        <div class="col-md-4 offset-md-9" id="mydiv">
+          <div class="content-section">
+            <h3>☃ ❄ ☁</h3>
+            <p class='text-muted'>≧◠‿●‿◠≦
+              <ul class="list-group">
+                <li class="list-group-item list-group-item-light">最新通知</li>
+                <li class="list-group-item list-group-item-light">公告</li>
+                <li class="list-group-item list-group-item-light">日历</li>
+                <li class="list-group-item list-group-item-light">其它</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+    </div>
+</div>
 {% endblock content %}

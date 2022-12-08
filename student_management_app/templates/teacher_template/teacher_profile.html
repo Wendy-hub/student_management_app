@@ -4,10 +4,11 @@
 {#教师下所有界面统一这部分#}
 {% block login_display %}
     <div class="border-end bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="sidebar-heading border-bottom">教师界面</div>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_home' %}"><i class="fa-solid fa-house"></i> 首页</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}"><i class="fa-solid fa-user"></i> 个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}"><i class="fa-solid fa-school"></i>  课程相关信息</a>
         </div>
     </div>
 {% endblock %}

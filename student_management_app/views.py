@@ -2,6 +2,8 @@ from itertools import chain
 
 from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count, Q, F, Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -10,6 +12,7 @@ from django.urls import reverse
 
 from .forms import StudentUpdateForm, TeacherUpdateForm, ScoreEditForm
 from .models import Student, Course, SC, Teacher
+from .filters import CourseFilter
 
 ADMIN_ID = 1  # superuser是1
 
@@ -200,8 +203,25 @@ def teacher_profile(request):
 
 @login_required
 def show_courses(request):
-    courses = Course.objects.filter(T_id=request.user.username)
-    context = {'courses': courses}
+    courses_by_number = Course.objects.filter(T_id=request.user.username).order_by('C_number')
+    courses_by_time = Course.objects.filter(T_id=request.user.username).order_by('C_time')
+    courses_id = Course.objects.filter(T_id=request.user.username).values('C_number')
+    print(courses_id)
+
+    print('-------')
+    # 该课学生人数，表都是小写
+    # , filter=Q(sc__C_id__T_id=request.user.username))
+    courses_by_studentnums = Course.objects.annotate(stunums=Count('sc')).order_by('stunums').filter(T_id=request.user.username)
+    print(courses_by_studentnums[0].stunums)
+    stunum_by_number = courses_by_studentnums.values('stunums').order_by('C_number')
+    stunum_by_time = courses_by_studentnums.values('stunums').order_by('C_time')
+    print(courses_by_studentnums.values('stunums'))
+
+    context = {
+        'courses_by_number': zip(courses_by_number, stunum_by_number),
+        'courses_by_C_time': zip(courses_by_time, stunum_by_time),
+        'courses_by_studentnums': zip(courses_by_studentnums, courses_by_studentnums.values('stunums'))
+    }
     return render(request, 'teacher_template/show_courses.html', context)
 
 
@@ -212,9 +232,24 @@ def show_course_students(request, course_id):
     scores = SC.objects.filter(C_id=course_id).order_by('S_id').values()
     # print(SC.objects.filter(C_id='0001'))
     s_numbers = scores.values('S_id')
-    students = Student.objects.filter(S_number__in=s_numbers).order_by('S_number').values()
+    students_obj = Student.objects.filter(S_number__in=s_numbers).order_by('S_number')
+    # 查询
+    stu_filter = CourseFilter(request.GET, queryset=students_obj)
+    students = stu_filter.qs
+    # 分页
+    row_list = list(zip(students, scores))
+    page = request.GET.get('page', 1)
+    paginator = Paginator(row_list, 8)
+    try:
+        results = paginator.page(page)
+    except PageNotAnInteger:
+        results = paginator.page(1)
+    except EmptyPage:
+        results = paginator.page(paginator.num_pages)
+    # 计算平均成绩
+    score_avg = scores.aggregate(Avg('score'))
 
-    context = {'results': zip(students, scores), 'course_id': course_id}
+    context = {'results': results, 'course_id': course_id, 'filter': stu_filter, 'score_avg': score_avg}
 
     return render(request, 'teacher_template/students_in_course.html', context)
 

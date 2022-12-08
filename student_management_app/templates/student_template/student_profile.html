@@ -5,8 +5,9 @@
     <div class="border-end bg-white" id="sidebar-wrapper">
         <div class="sidebar-heading border-bottom bg-light">学生界面</div>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_profile' %}>个人信息</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_result' %}>查看课程及成绩</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'student_home' %}"><i class="fa-solid fa-house"></i> 首页</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_profile' %}><i class="fa-brands fa-twitter"></i>个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href={% url 'student_result' %}><i class="fa-solid fa-hippo"></i>    查看课程及成绩</a>
         </div>
     </div>
 {% endblock %}

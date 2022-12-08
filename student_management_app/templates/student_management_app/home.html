@@ -12,19 +12,28 @@
         <link rel="icon" type="image/x-icon" href="../../static/images/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link rel="stylesheet" type="text/css" href="{% static 'app/main.css' %}">
+        <!-- Table -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 
         {% if title %}
             <title>学籍管理系统 - {{ title }}</title>
         {% else %}
             <title>学籍管理系统</title>
         {% endif %}
+
+    {% block style %}
+    {% endblock %}
+    {% block js %}
+    {% endblock %}
     </head>
     <body>
         <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             {% block login_display %} <!--在用户登录之后改变这一块的显示内容-->
             <div class="border-end bg-white" id="sidebar-wrapper">
-                <div class="sidebar-heading border-bottom bg-light"></div>
+                <div class="sidebar-heading border-bottom bg-light">学生管理系统</div>
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'index' %}">主页</a>
                 </div>
@@ -36,7 +45,7 @@
                 <!-- Top navigation-->
                 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                     <div class="container-fluid">
-                        <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+                        <button class="btn btn-primary" id="sidebarToggle">菜单</button>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">

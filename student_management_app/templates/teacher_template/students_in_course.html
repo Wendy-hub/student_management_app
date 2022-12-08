@@ -1,17 +1,34 @@
 {% extends 'student_management_app/home.html' %}
+{% load crispy_forms_filters %}
+
+{% block js %}
+    <script>
+    $(document).ready( function () {
+        $('#students_table').DataTable();
+    } );
+    </script>
+{% endblock %}
+
 {#教师下所有界面统一这部分#}
 {% block login_display %}
     <div class="border-end bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading border-bottom bg-light">教师界面</div>
+        <div class="sidebar-heading border-bottom">教师界面</div>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}">个人信息</a>
-            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}">课程相关信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_home' %}"><i class="fa-solid fa-house"></i> 首页</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'teacher_profile' %}"><i class="fa-solid fa-user"></i> 个人信息</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'show_courses' %}"><i class="fa-solid fa-school"></i>  课程相关信息</a>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
 <h3 class="m-4">课程号{{ course_id }}的所有学生</h3>
+
+    <form method="get">
+        {{ filter.form }}
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+
 <div class="row">
   <div class="col-12">
     {% if results %}
@@ -22,15 +39,15 @@
       <div class="card-body">
         <p class="card-text">
           <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover" id="students_table">
               <thead>
                 <tr>
-                  <th scope="col">学号</th>
-                  <th scope="col">姓名</th>
-                  <th scope="col">性别</th>
-                  <th scope="col">专业</th>
-                  <th scope="col">成绩</th>
-                  <th scope="col">操作</th>
+                  <th scope="col"><button class="btn btn-primary btn-lg btn-block">学号</button></th>
+                  <th scope="col"><button class="btn btn-secondary btn-lg btn-block">姓名</button></th>
+                  <th scope="col"><button class="btn btn-danger btn-lg btn-block">性别</button></th>
+                  <th scope="col"><button class="btn btn-info btn-lg btn-block">专业</button></th>
+                  <th scope="col"><button class="btn btn-success btn-lg btn-block">成绩</button></th>
+                  <th scope="col"><button class="btn btn-warning btn-lg btn-block">操作</button></th>
                 </tr>
               </thead>
               <tbody>
@@ -84,10 +101,40 @@
           </div>
         </p>
       </div>
-    </div>
-    {% else %}
-      <h5 class="alert alert-primary ms-4 me-4">No Student Records</h5>
+
+    {% if results.has_other_pages %}
+        <ul class="pagination">
+        {% if results.has_previous %}
+            <li><a class="btn btn-outline-info mb-4" href="?page={{ results.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+            <li class="disabled"><i class="btn btn-outline-info mb-4 fa-solid fa-backward-step"></i></li>
+        {% endif %}
+
+        {% for i in results.paginator.page_range %}
+            {% if results.number == i %}
+                <li class="active btn btn-outline-info mb-4"><span>{{ i }}<span class="sr-only"> (current) </span>.</span></li>
+            {% else %}
+                <li><a class="btn btn-outline-info mb-4" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if results.has_next %}
+            <li><a class="btn btn-outline-info mb-4" href="?page={{ results.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li><i class="btn btn-outline-info mb-4 fa-solid fa-forward-step"></i></li>
+        {% endif %}
+        </ul>
     {% endif %}
-  </div>
+
+    <div>
+        <p>
+            平均分：<strong style="font-size: large"> {{ score_avg.score__avg }} </strong>
+        </p>
+    </div>
+
+    </div>
+        {% else %}
+          <h5 class="alert alert-primary ms-4 me-4">No Student Records</h5>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

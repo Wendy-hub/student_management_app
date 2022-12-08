@@ -1,9 +1,12 @@
 {% extends "student_management_app/home.html" %}
+
+
+
 {% block content %}
-    <h2>You have been logged out</h2>
+    <h2 style="color: #ed6ca7; margin-top: 20px; margin-left: 30px">您已成功登出！</h2>
     <div class="border-top pt-3">
-        <small class="text-muted">
-            <a href="{% url 'index' %}">Log In Again</a>
+        <small class="text-muted" style="color: #ed6ca7; margin-top: 20px; margin-left: 30px">
+            <a href="{% url 'index' %}">重新登陆</a>
         </small>
     </div>
 {% endblock content %}
