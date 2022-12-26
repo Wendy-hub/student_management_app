@@ -26,6 +26,19 @@ $ pip install django-filter
 ```sh
 127.0.0.1:8000
 ```
+### 使用
+先在settings里更改DATABASES，默认注释是sqlite3，可以看到我采用的是本地的MySQL数据库。
+连接数据库时，先执行
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+之后建议创建管理员，在127.0.0.1/admin页面进行数据的增删改查
+```
+python manage.py createsuperuser
+```
+
+另外邮箱验证修改密码，需要在settings.py最后设置自己的邮箱和相应smtp服务商给的密码。
 
 ![ER-diagram](images/ER.png)
 ![show](images/show.png)
